@@ -3,7 +3,7 @@
 
 import Foundation
 
-public struct Hike: Identifiable {
+public struct Hike: Identifiable, Hashable {
     public let id: UUID = UUID()
     public let name: String
     public let photoURL: String

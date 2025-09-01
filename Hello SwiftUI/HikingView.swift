@@ -16,31 +16,47 @@ struct HikingView: View {
     ]
     
     var body: some View {
-        List(hikes) { hike in
-            HStack(alignment: .center) {
-                AsyncImage(url: URL(string: hike.photoURL)) { image in
-                    image
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .clipShape(RoundedRectangle(cornerRadius: 12))
-                        .frame(width: 120)
-                } placeholder: {
-                    Text("Image is loading...")
-                }
-
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(hike.name)
-                        .font(.system(size: 18))
-                        .fontWeight(.medium)
-                    Text("\(hike.miles.formatted()) miles away")
-                        .font(.system(size: 14))
+        NavigationStack {
+            List(hikes) { hike in
+                NavigationLink(value: hike) {
+                    HikeCellView(hike: hike)
                 }
             }
-            .padding([.top, .bottom], 4)
+            .navigationTitle("Hikes")
+            .navigationDestination(for: Hike.self) { hike in
+                HikeDetailView(hike: hike)
+            }
         }
     }
 }
 
 #Preview{
     HikingView()
+}
+
+struct HikeCellView: View {
+    let hike: Hike
+    
+    var body: some View {
+        HStack(alignment: .center) {
+            AsyncImage(url: URL(string: hike.photoURL)) { image in
+                image
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                    .frame(width: 120)
+            } placeholder: {
+                Text("Image is loading...")
+            }
+            
+            VStack(alignment: .leading, spacing: 2) {
+                Text(hike.name)
+                    .font(.system(size: 18))
+                    .fontWeight(.medium)
+                Text("\(hike.miles.formatted()) miles away")
+                    .font(.system(size: 14))
+            }
+        }
+        .padding([.top, .bottom], 4)
+    }
 }
